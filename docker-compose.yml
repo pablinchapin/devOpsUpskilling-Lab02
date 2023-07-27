@@ -7,8 +7,6 @@ services:
   
   mysqldb:
     build: ./mysql
-    #environment:
-      #MYSQL_DATABASE: test
     ports:
      - '3306:3306'
     networks:
@@ -25,12 +23,7 @@ services:
       - mysqldb
     links:
       - mysqldb
-    #environment:
-      #MYSQL_DATABASE: test
-      #MYSQL_USER: root
-      #MYSQL_PASSWORD: super-secret
-      #MYSQL_HOST: mysqldb
-  
+    
   nginx:
     build: ./nginx
     ports:
