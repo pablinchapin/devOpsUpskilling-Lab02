@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sample Site</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="jumbotron">
+      <h1>DevOps Upskilling Lab. 02</h1>
+      <h3>Developed by Pablo Alfonso Vargas</h3>
+    </div>
+    
+    <hr/>
+    <div class="jumbotron">
+        <h3>Quotes retrieved from MySQL DB</h3>
+        <br />
+        <div id="dataFromMySQL"></div>
+    </div>
+  </div>
+
+  <script>
+    $(function () {
+      $.get("http://localhost:8080/dbtest", function (data, status) {
+        
+        console.log(data);
+        console.log(status);
+
+        let jsonData = JSON.stringify(data.rows);
+        let quotes = JSON.parse(jsonData);
+        let cardContainer = $("<div />");
+
+        for (var i = 0; i < quotes.length; i++) {
+          let id = quotes[i].id;
+          let author = quotes[i].author;
+          let quote = quotes[i].quote;
+
+          var card = $("<div class=\"card border-primary mb-3\" />")
+
+          var cardHeader = $("<div class=\"card-header bg-light mb-3\" />")
+          cardHeader.html("# "+id);
+          card.append(cardHeader);
+
+          var cardBody = $("<div class=\"card-body\" />");
+          var blockquote = $("<blockquote class=\"blockquote mb-0\" />");
+          var paragraph = $("<p />");
+          var footer = $("<footer class=\"blockquote-footer\">");
+          var spacer = $("<br />");
+          
+          paragraph.html(quote);
+          footer.html(author);
+
+          cardContainer.append(
+              card.append(cardBody.append(blockquote.append(paragraph).append(footer))).append(spacer)
+          );
+
+        }
+
+        var dataTable = $("#dataFromMySQL");
+        dataTable.html("");
+        dataTable.append(cardContainer);
+      
+      })
+    });
+  </script>
+
+</body>
+</html>

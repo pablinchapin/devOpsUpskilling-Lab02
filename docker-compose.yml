@@ -1,0 +1,41 @@
+version: '3.9'
+
+networks:
+  appnet:
+
+services:
+  
+  mysqldb:
+    build: ./mysql
+    #environment:
+      #MYSQL_DATABASE: test
+    ports:
+     - '3306:3306'
+    networks:
+      - appnet
+  
+  app:
+    restart: on-failure
+    build: ./app
+    ports:
+      - '8081:5000'
+    networks:
+      - appnet
+    depends_on:
+      - mysqldb
+    links:
+      - mysqldb
+    #environment:
+      #MYSQL_DATABASE: test
+      #MYSQL_USER: root
+      #MYSQL_PASSWORD: super-secret
+      #MYSQL_HOST: mysqldb
+  
+  nginx:
+    build: ./nginx
+    ports:
+      - '8080:80'
+    networks:
+      - appnet
+    depends_on:
+     - app
